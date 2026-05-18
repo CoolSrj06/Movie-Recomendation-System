@@ -66,13 +66,17 @@ def build_movie_list():
     # build tags: overview + genres + keywords + cast + director
     def make_tags(row):
         parts = []
+
         if pd.notna(row.get("overview")):
-            parts.append(row.get("overview", ""))
-        parts.extend(row.get("genres") or [])
-        parts.extend(row.get("keywords") or [])
-        parts.extend(row.get("cast") or [])
+            parts.append(str(row.get("overview", "")))
+
+        parts.extend([str(g) for g in (row.get("genres") or [])])
+        parts.extend([str(k) for k in (row.get("keywords") or [])])
+        parts.extend([str(c) for c in (row.get("cast") or [])])
+
         if row.get("crew"):
-            parts.append(row.get("crew"))
+            parts.append(str(row.get("crew")))
+
         return " ".join(parts)
 
     df["tags"] = df.apply(make_tags, axis=1)

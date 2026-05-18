@@ -24,6 +24,11 @@ def build_similarity() -> None:
 
     df = pd.read_pickle(MOVIE_LIST_PATH)
 
+    # Ensure tags are strings
+    df["tags"] = df["tags"].apply(
+        lambda x: " ".join(map(str, x)) if isinstance(x, list) else str(x)
+    )
+
     if "tags" not in df.columns:
         raise ValueError("movie_list.pkl must contain a 'tags' column to build similarity.pkl")
 
