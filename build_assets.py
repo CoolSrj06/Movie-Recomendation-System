@@ -13,6 +13,15 @@ SIMILARITY_PATH = ROOT / "similarity.pkl"
 
 
 def build_similarity() -> None:
+    # If movie_list.pkl doesn't exist, try to build it from CSVs
+    if not MOVIE_LIST_PATH.exists():
+        try:
+            from build_movie_list import build_movie_list
+
+            build_movie_list()
+        except Exception as e:
+            raise RuntimeError("movie_list.pkl missing and failed to build from CSVs: " + str(e))
+
     df = pd.read_pickle(MOVIE_LIST_PATH)
 
     if "tags" not in df.columns:
